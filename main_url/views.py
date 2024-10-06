@@ -16,7 +16,7 @@ def main(request):
         existing_url = UrlInfo.objects.filter(url=url).first()
         if existing_url:
             short_url = request.build_absolute_uri('/u/') + existing_url.short_url
-            urls = UrlInfo.objects.all() if request.user.is_authenticated else None
+            urls = UrlInfo.objects.filter(user=request.user) if request.user.is_authenticated else None
             context = {
                 'short_url': short_url,
                 'urls': urls,
@@ -35,7 +35,7 @@ def main(request):
             short_url = request.build_absolute_uri('/u/') + short_code
             UrlInfo.objects.create(url=url, short_url=short_code, user=user)
         
-        urls = UrlInfo.objects.all() if request.user.is_authenticated else None
+        urls = UrlInfo.objects.filter(user=request.user) if request.user.is_authenticated else None
         context = {
             'short_url': short_url,
             'urls': urls,
@@ -45,7 +45,7 @@ def main(request):
     
     else:
         short_url = 'Short URL'
-        urls = UrlInfo.objects.all() if request.user.is_authenticated else None
+        urls = UrlInfo.objects.filter(user=request.user) if request.user.is_authenticated else None
         context = {
             'short_url': short_url,
             'urls': urls,
