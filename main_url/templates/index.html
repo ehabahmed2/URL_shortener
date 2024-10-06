@@ -1,49 +1,20 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-
-
-<body class="bg-dark text-light">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="{% url "main" %}">URL Shortener</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">About</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            User
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-dark bg-success" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#">Register</a></li>
-                            <li><a class="dropdown-item" href="#">Login</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <!-- Hero Section -->
     <section style="background: url('{% static 'images/background.webp' %}') no-repeat center center/cover;" class="hero text-center text-light py-5 bg-dark">
         <div class="container">
             <h1 class="display-4 mb-4">Shorten Your URLs in Seconds</h1>
             <p class="lead mb-5">Simple, fast, and secure URL shortening.</p>
-            <form method="POST" class="d-flex justify-content-center">
+            <form method="POST" class="d-flex justify-content-center" action = '#'>
+                {% csrf_token %}
                 <input type="url" name="original_url" class="form-control form-control-lg me-2" placeholder="Enter your long URL..." required>
                 <button type="submit" class="btn btn-lg btn-success">Shorten URL</button>
             </form>
             <div class="mt-4">
                 <p>Your shortened URL:</p>
-                <a href="#" class="btn btn-outline-success">#</a>
+                <a href="{{short_url}}" target="_blank" class="btn btn-outline-success">{{short_url}}</a>
             </div>
         </div>
     </section>
@@ -61,13 +32,17 @@
                             <th>Clicks</th>
                         </tr>
                     </thead>
+                    {% if user.is_authenticated %}
+                    {% for url in urls %}
                     <tbody>
                         <tr>
-                            <td><a href="#" class="text-light"> Short code </a></td>
-                            <td>Original url</td>
-                            <td>Click count</td>
+                            <td><a href="{{ base_url }}{{ url.short_url }}" class="text-light"> {{ base_url }}{{ url.short_url }}</a></td>
+                            <td>{{url.url}}</td>
+                            <td>{{url.clicks}}</td>
                         </tr>
                     </tbody>
+                    {% endfor %}
+                    {% endif %}
                 </table>
             </div>
         </div>
