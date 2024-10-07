@@ -20,7 +20,7 @@
             </form>
             <div class="mt-4">
                 <p>Your shortened URL:</p>
-                <a href="{{short_url}}" target="_blank" class="btn btn-outline-success">{{short_url}}</a>
+                <a href="{{short_url}}" target="_blank" class="btn btn-outline-success" id="short-url-link">{{short_url}}</a>
             </div>
         </div>
     </section>
@@ -70,5 +70,17 @@
             <p class="text-center">You can also register to save and track your link history securely!</p>
         </div>
     </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var shortUrlLink = document.getElementById("short-url-link");
+    
+            // Check if the URL is valid (not default value)
+            if (shortUrlLink.textContent === "Short URL" || shortUrlLink.textContent.trim() === "") {
+                shortUrlLink.classList.add("disabled");  // Add disabled class to prevent click
+                shortUrlLink.style.pointerEvents = "none";  // Disable pointer events to prevent clicking
+                shortUrlLink.style.color = "grey";  // Change the color to indicate it's disabled
+            }
+        });
+    </script>
     {% endblock content %}
 
